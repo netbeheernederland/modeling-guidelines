@@ -23,7 +23,7 @@ system operator specific dataset must be validated together.
 
 == Metadata
 
-Metadata MUST conform to the https://modellen.netbeheernederland.nl/nbnl-dataset[NBNL Profile Group Data Exchange Standard].
+Metadata MUST conform to the https://modellen.netbeheernederland.nl/nbnl-data-exchange[NBNL Profile Group Data Exchange Standard].
 The standard provides a SHACL that can be used to validate the metadata automatically. See <<_validation>>.
 
 .Empty dataset
@@ -51,7 +51,7 @@ The standard provides a SHACL that can be used to validate the metadata automati
       "@id": "https://modellen.netbeheernederland.nl/nbnl-equipment/1.0"
     },
     {
-      "@id": "https://modellen.netbeheernederland.nl/nbnl-dataset/1.0"
+      "@id": "https://modellen.netbeheernederland.nl/nbnl-data-exchange/1.0"
     }
   ],
   "dcterms:references": [ <7>
@@ -76,7 +76,7 @@ The following information is required:
 
 === Validation
 
-Dataset metadata can be validated automatically using the Dataset Metadata SHACL which is part of the https://modellen.netbeheernederland.nl/nbnl-dataset[NBNL Profile Group Data Exchange Standard]. The SHACL shapes graph can be downloaded from that website, or it can be referenced by its IRI directly. See the example below to see this in action.
+Dataset metadata can be validated automatically using the Dataset Metadata SHACL which is part of the https://modellen.netbeheernederland.nl/nbnl-data-exchange[NBNL Profile Group Data Exchange Standard]. The SHACL shapes graph can be downloaded from that website, or it can be referenced by its IRI directly. See the example below to see this in action.
 
 [#warning-dataset-type]
 [WARNING]
@@ -92,7 +92,7 @@ of the data model. This will not work though, because data and its metadata live
 .Example: Validating dataset metadata using PySHACL
 ====
 
-Let's use the https://modellen.netbeheernederland.nl/nbnl-dataset/1.0/dataset-metadata.shacl.jsonld[Dataset Metadata SHACL 1.0] to validate the xref:attachment$empty-dataset.example.jsonld[empty dataset example].
+Let's use the https://modellen.netbeheernederland.nl/nbnl-data-exchange/1.0/dataset-metadata.shacl.jsonld[Dataset Metadata SHACL 1.0] to validate the xref:attachment$empty-dataset.example.jsonld[empty dataset example].
 
 [source,python,subs=+attributes]
 ....
@@ -103,7 +103,7 @@ dataset = Dataset()
 dataset.parse("{site-url}/{page-component-version}/_attachments/empty-dataset.example.jsonld", format="json-ld")
 
 shapes_graph = Graph()
-shapes_graph.parse("https://modellen.netbeheernederland.nl/nbnl-dataset/1.0/dataset-metadata.shacl.jsonld", format="json-ld")
+shapes_graph.parse("https://modellen.netbeheernederland.nl/nbnl-data-exchange/1.0/dataset-metadata.shacl.jsonld", format="json-ld")
 
 conforms, results_graph, results_text = validate(dataset.default_graph,
                                                  shacl_graph=shapes_graph,
