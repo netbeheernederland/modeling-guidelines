@@ -51,3 +51,4 @@ For now the WGS84 / EPSG 4326 as URNs is allowed:
       "cim:IdentifiedObject.name": "WGS84"
     }
 
+and is part of the  https://modellen.netbeheernederland.nl/object-register/[NBNL Object-Register] as the standard CoordinateSystem.
