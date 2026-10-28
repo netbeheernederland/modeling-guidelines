@@ -41,7 +41,7 @@ The standard provides a SHACL that can be used to validate the metadata automati
   "dcterms:title": "Low Voltage (LV) JSON-LD instance data", <3>
   "dcterms:issued": { <4>
     "@value": "2025-12-05T12:34:567Z",
-    "@type": "xsd:date"
+    "@type": "xsd:dateTime"
   },
   "dcterms:publisher": { <5>
     "@id": "market-parties:LIANDER"
