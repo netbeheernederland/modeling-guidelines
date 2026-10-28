@@ -39,6 +39,8 @@ image::image-2026-07-22-13-59-40-157.jpg[]
 
 * A load connected to the grid at or below the lowest modelled voltage level is modelled as aggregate load (group of EnergyConsumers) connected to for example a {tc57}/TopologicalNode.html[cim:TopologicalNode] using a cim:EnergyConsumer object with aggregate=true. The *aggregated* EnergyConsumer describes in this case the total load of all individual EnergyConsumers of the {tc57}/Feeder.html[cim:Feeder].
 
+* A load connected to multiple points in the grid (meshed topology). The `EnergyConsumer` is associated to multiple `PowerTransformerEnd`-s through the use of {tc57}/TopologicalNode.html[cim:TopologicalNode-s] and the associated `Terminal`-s. No `cim:Equipment.EquipmentContainer` is provided, instead a singular `cim:Equipment.BaseVoltage` is provided for the `EnergyConsumer`.
+
 .Energyconsumer modelled as aggregated load with connection to a TopologicalNode (feeder)
 image::image-2026-07-22-17-00-38-363.jpg[]
 
@@ -76,4 +78,4 @@ For more information see:
 
 * IEC CIM documentation (https://www.nen.nl/nen-en-iec-61970-301-2020-en-274877[IEC 61970-301: Common Information Model (CIM) Base])
 
-* and the following https://www.ofgem.gov.uk/sites/default/files/2023-08/FoS%20Annex%202%20-%20LTDS%20Grid%20Modelling%20Guidelines1692977149555.pdf[ofgem] document.
+* and the following https://www.ofgem.gov.uk/sites/default/files/2023-08/FoS%20Annex%202%20-%20LTDS%20Grid%20Modelling%20Guidelines1692977149555.pdf[OFGEM] document.
