@@ -1,0 +1,32 @@
+{
+  "@context": {
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "market-parties": "https://modellen.netbeheernederland.nl/controlled-vocabularies/market-parties#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@id": "urn:uuid:2d3088c1-2b9a-4cbc-84fa-c0670e0e8ecc",
+  "@type": "dcat:Dataset",
+  "dcterms:title": "Low Voltage (LV) JSON-LD instance data",
+  "dcterms:issued": {
+    "@value": "2025-12-05T12:34:567Z",
+    "@type": "xsd:dateTime"
+  },
+  "dcterms:publisher": {
+    "@id": "market-parties:LIANDER"
+  },
+  "dcterms:conformsTo": [
+    {
+      "@id": "https://modellen.netbeheernederland.nl/nbnl-equipment/1.0"
+    },
+    {
+      "@id": "https://modellen.netbeheernederland.nl/nbnl-data-exchange/1.0"
+    }
+  ],
+  "dcterms:references": [
+    {
+      "@id": "urn:uuid:4562ba86-b5e0-470b-8e36-dae55428d77f"
+    }
+  ],
+  "@graph": []
+}
