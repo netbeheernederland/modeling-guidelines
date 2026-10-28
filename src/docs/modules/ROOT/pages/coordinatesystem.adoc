@@ -44,10 +44,10 @@ For now the WGS84 / EPSG 4326 as URNs is allowed:
     {
       "@id": "urn:uuid:8dabcb33-6555-4ad8-a7ba-f1fb162ae98c",
       "@type": "cim:CoordinateSystem",
-      "cim:CoordinateSystem.crsUrn": [
-        "urn:ogc:def:crs:EPSG::4.3.2.6"
-      ],
+      "cim:CoordinateSystem.crsUrn": {
+         "@id": "urn:ogc:def:crs:EPSG::4.3.2.6"
+      },
       "cim:IdentifiedObject.mRID": "8dabcb33-6555-4ad8-a7ba-f1fb162ae98c",
       "cim:IdentifiedObject.name": "WGS84"
-    },
+    }
 
