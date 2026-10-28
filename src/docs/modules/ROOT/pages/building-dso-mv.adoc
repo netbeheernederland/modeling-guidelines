@@ -26,7 +26,7 @@ system operator specific dataset must be validated together.
 Metadata MUST conform to the https://modellen.netbeheernederland.nl/nbnl-dataset[NBNL Profile Group Data Exchange Standard].
 The standard provides a SHACL that can be used to validate the metadata automatically. See <<_validation>>.
 
-.Metadata Empty dataset
+.Empty dataset
 ====
 [source,json]
 ----
