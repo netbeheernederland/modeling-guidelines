@@ -3,5 +3,5 @@
 include::partial$indexpatterns.adoc[]
 * Shapes
 include::partial$indexshapes.adoc[]
-* Data Sets
+* Datasets
 include::partial$indexdatasets.adoc[]

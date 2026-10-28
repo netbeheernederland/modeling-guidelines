@@ -1,4 +1,4 @@
-= Building the Data Sets
+= Building the Datasets
 
 The Equipment data product defines how devices and equipment in a power network
 are modelled, i.e. the connectivity of the grid (node/breaker). This document
@@ -7,9 +7,8 @@ datasets.
 
 CAUTION: Generate your own mRIDs using _UUID4_
 
-All JSON-LD examples below are just that; do **not** reuse mRIDs unless
-retrieved from the
-https://modellen.netbeheernederland.nl/object-register[NBNL Object Register].
+Do **not** reuse mRIDs and IRIs unless
+retrieved from the https://modellen.netbeheernederland.nl/object-register[NBNL Object Register] or from https://modellen.netbeheernederland.nl/controlled-vocabularies[Controlled Vocabularies].
 
 == Overview
 
@@ -24,40 +23,80 @@ system operator specific dataset must be validated together.
 
 == Metadata
 
-Each dataset requires metadata to keep track of issuer, issuance date, schema
-and dependencies.
+Metadata MUST conform to the https://modellen.netbeheernederland.nl/nbnl-dataset[NBNL Profile Group Data Exchange Standard].
+The standard provides a SHACL that can be used to validate the metadata automatically. See <<_validation>>.
 
+====
 [source,json]
 ----
 "@id": "urn:uuid:2d3088c1-2b9a-4cbc-84fa-c0670e0e8ecc", <1>
+"@type": "dcat:Dataset", <2>
 "dcterms:issued": {
-  "@value": "2025-12-05T12:34:567Z", <2>
+  "@value": "2025-12-05T12:34:567Z", <3>
   "@type": "xsd:date"
 },
 "dcterms:publisher": {
-  "@id": "urn:uuid:4f74c8e2-adb5-4815-9607-eb00fb6a0d55",
-  "dcterms:title": "Liander" <3>
+  "@id": "https://modellen.netbeheernederland.nl/controlled-vocabularies/market-parties#LIANDER", <4>
 },
 "dcterms:conformsTo": [
   {
-    "@id": "https://modellen.netbeheernederland.nl/nbnl-equipment/1.0" <4>
+    "@id": "https://modellen.netbeheernederland.nl/nbnl-equipment/1.0" <5>
   }
 ],
 "dcterms:references": [
   {
-    "@id": "urn:uuid:4562ba86-b5e0-470b-8e36-dae55428d77f" <5>
+    "@id": "urn:uuid:4562ba86-b5e0-470b-8e36-dae55428d77f" <6>
   }
 ]
 ----
+====
 
 The following information is required:
 
-1. unique identifier for this dataset. Use a generated UUID;
-2. issuance data, start of the validity period for this dataset;
-3. publisher of the dataset. Use the mRID/name from the _NBNL Object Register_;
-4. schema to validate the dataset against. Verify usage of the correct version;
-5. any datasets this dataset is dependant on. For any non-boundary datasets,
+<1> unique identifier for this dataset. Use a generated UUIDv4 URN;
+<2> the type of the dataset <<warning-dataset-type,needs to be `dcat:Dataset`>>;
+<3> issuance data, start of the validity period for this dataset;
+<4> publisher of the dataset. Use an IRI from the https://modellen.netbeheernederland.nl/controlled-vocabularies/market-parties[Market Parties] controlled vocabulary;
+<5> schema to validate the dataset against. Verify usage of the correct version;
+<6> any datasets this dataset is dependant on. For any non-boundary datasets,
 this is the _@id_ of the boundary dataset referred to.
+
+=== Validation
+
+Dataset metadata can be validated automatically using the Dataset Metadata SHACL which is part of the https://modellen.netbeheernederland.nl/nbnl-dataset[NBNL Profile Group Data Exchange Standard]. The SHACL shapes graph can be downloaded from that website, or it can be referenced by its IRI directly. See the example below to see this in action.
+
+[#warning-dataset-type]
+[WARNING]
+--
+If the dataset does not assert to be of type `dcat:Dataset`, SHACL will not target it for validation and will yield false positive results.
+
+Also, make sure you validate against the default graph of the JSON-LD which is where
+the metadata lives, or you risk getting false positive results.footnote:[Note for modellers: it may be tempting to import the _Dataset Metadata SHACL_ in the SHACL
+of the data model. This will not work though, because data and its metadata live in different graphs.]
+--
+
+[%collapsible]
+.Example: Validating dataset metadata using PySHACL
+====
+
+Let's use the https://modellen.netbeheernederland.nl/nbnl-dataset/1.0/dataset-metadata.shacl.jsonld[Dataset Metadata SHACL 1.0] to validate the xref:attachment$empty-dataset.example.jsonld[empty dataset example].
+
+[source,python,subs=+attributes]
+....
+from rdflib import Dataset, Graph
+from pyshacl import validate
+
+dataset = Dataset()
+dataset.parse("{site-url}/{page-component-version}/_attachments/empty-dataset.example.jsonld", format="json-ld")
+
+shapes_graph = Graph()
+shapes_graph.parse("https://modellen.netbeheernederland.nl/nbnl-dataset/1.0/dataset-metadata.shacl.jsonld", format="json-ld")
+
+conforms, results_graph, results_text = validate(dataset.default_graph,
+                                                 shacl_graph=shapes_graph,
+                                                 do_owl_imports=True)
+....
+====
 
 == TSO High Voltage (Boundary) Dataset
 
