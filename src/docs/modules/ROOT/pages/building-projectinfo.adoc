@@ -1,0 +1,155 @@
+= Building the Projectinfo
+
+include::partial$include.adoc[]
+:author: Arend Hagreis
+:email: ahagreis@netbeheernederland.nl
+include::partial$header.adoc[]
+
+The Capaciteitskaart shows which physical grid expansions and upgrades are planned, including the intended commissioning date. This way, you can see which project phase a grid expansion is in.
+
+In cim the activities related to a project is mostly part of the {tc57}/Work.html[cim:Work] class. The Work class is used to describe al activities, which can be a single work or a combination of multiple works. The Work class is part of NBNL Asset Profilegroup and this page defines how project information in a power network is modelled. This document explains the structure and how instances interact across datasets.
+
+The (conducted) work is based on a plan (project) within a certain period, based on tasks in certain areas which in turn are related to assets in that area.
+
+== Work Class
+The {tc57}/Work.html[cim:Work] class contains the information regarding the plan (project) and could be related to a {tc57}/Project.html[cim:Project] (not part of this example) for a certain period of time
+
+.NBNL AS (Asset) Profile
+[source,json]
+----
+    {
+      "@id": "urn:uuid:eaf49538-cd99-5efa-adde-f8223fd79c2a",
+      "@type": "cim:Work",
+      "cim:IdentifiedObject.mRID": "eaf49538-cd99-5efa-adde-f8223fd79c2a",
+      "cim:Work.workOrderNumber": "A-1003xxx",
+      "cim:IdentifiedObject.name": "Vervangen 150kV station",
+      "nl:Work.source": "Investeringsplan",
+      "cim:BaseWork.statusKind": {
+        "@id": "cim:WorkStatusKind.scheduled"
+      },
+      "cim:IdentifiedObject.description": "Congestion area: Flevopolder, Utrecht en Gelderland.",
+      "cim:BaseWork.TimeSchedules": [
+        {
+          "@id": "urn:uuid:18a0a560-925b-5742-9b5c-7e026c2ca64f"
+        }
+      ]
+    }
+----
+Information about the project is stored in the Work class. The Work class contains information about the project, such as the name, description, work order number, source and status. The Work class also contains a list of TimeSchedules that describe the expected end date of the project.
+
+"cim:BaseWork.statusKind" is an enumeration that describes the status of the project. The status can be one of the following:
+[cols=",,,",]
+|===
+|*Status*|*cim:WorkStatusKind*|*Source phase DSO*|*Source phase TSO*
+|approved |cim:WorkStatusKind.approved |Initiatiefase|Studie
+|inProgress |cim:WorkStatusKind.inProgress |Uitvoeringsfase|Realisatie
+|scheduled |cim:WorkStatusKind.scheduled |Definitie- en ontwerpfase|Basisontwerp
+|===
+
+== WorkTimeSchedule Class
+The {tc57}/WorkTimeSchedule.html[cim:WorkTimeSchedule] class
+
+.NBNL AS (Asset) Profile
+[source,json]
+----
+    {
+      "@id": "urn:uuid:18a0a560-925b-5742-9b5c-7e026c2ca64f",
+      "@type": "cim:WorkTimeSchedule",
+      "cim:IdentifiedObject.mRID": "18a0a560-925b-5742-9b5c-7e026c2ca64f",
+      "cim:IdentifiedObject.name": "Expected completion",
+      "cim:IdentifiedObject.description": "Verwachte einddatum",
+      "cim:TimeSchedule.scheduleInterval": {
+        "@id": "urn:uuid:0952eb1d-eb63-52c8-8b80-1a9b7158294a"
+      }
+    }
+----
+
+The class contains the expected enddate or the final enddate based on a single date or a range of dates. The expected enddate is stored in the TimeSchedule.scheduleInterval attribute, which is a reference to the DateTimeInterval class.
+
+
+== DateTimeInterval Class
+The {tc57}/DateTimeInterval.html[DateTimeInterval] class
+
+Example 1, based on a single date (year), in this example the expected end date of the project is 2030.
+
+.NBNL AS (Asset) Profile
+[source,json]
+----
+    {
+      "@id": "urn:uuid:0952eb1d-eb63-52c8-8b80-1a9b7158294a",
+      "@type": "cim:DateTimeInterval",
+      "cim:DateTimeInterval.end": {
+        "@value": "2030-12-31",
+        "@type": "http://www.w3.org/2001/XMLSchema#date"
+      }
+    }
+----
+
+Example 2, based on a range (year-year), in this example the expected end date of the project is between 2029 and 2030.
+
+.NBNL AS (Asset) Profile
+[source,json]
+----
+    {
+      "@id": "urn:uuid:0952eb1d-eb63-52c8-8b80-1a9b7158294a",
+      "@type": "cim:DateTimeInterval",
+      "cim:DateTimeInterval.start": {
+        "@value": "2029-01-01",
+        "@type": "http://www.w3.org/2001/XMLSchema#date"
+      },
+      "cim:DateTimeInterval.end": {
+        "@value": "2030-12-31",
+        "@type": "http://www.w3.org/2001/XMLSchema#date"
+      }
+    }
+----
+
+== WorkTask class
+The {tc57}/WorkTask.html[WorkTask] class
+
+The WorkTask class is used to describe the activities on one or multiple Asset (for example in a N-1 situation) in a certain area. The WorkTask class is based on the information about the related area where the task is being conducted, such as the name and description. The WorkTask class also contains a list of Works that are related to the Task.
+
+.NBNL AS (Asset) Profile
+[source,json]
+----
+    {
+      "@id": "urn:uuid:18a0a560-925b-5742-9b5c-7e026c2ca64f",
+      "@type": "cim:WorkTask",
+      "cim:WorkTask.Assets": [
+        {
+          "@id": "urn:uuid:4f3b7c21-987a-4c22-b111-9a7c8e9f2d12"
+        }
+      ],
+      "cim:WorkTask.Work": [
+        {
+          "@id": "urn:uuid:eaf49538-cd99-5efa-adde-f8223fd79c2a"
+        }
+      ],
+      "cim:IdentifiedObject.mRID": "18a0a560-925b-5742-9b5c-7e026c2ca64f",
+      "cim:IdentifiedObject.name": "Flevopolder, Utrecht en Gelderland"
+    }
+
+----
+
+
+== Asset class
+The {tc57}/Asset.html[Asset] class is used to describe the physical assets associated with the project. Every Asset has a relation to their PowerSystemResources. In most cases is this the PowerTransformer, but it can also be an ACLineSegment(Cable) or a BusBarSection. The Asset class contains also information about the asset, such as the name and description.
+
+.NBNL AS (Asset) Profile
+[source=json]
+----
+    {
+      "@id": "urn:uuid:4f3b7c21-987a-4c22-b111-9a7c8e9f2d12",
+      "@type": "cim:Asset",
+      "cim:Asset.PowerSystemResources": [
+        {
+          "@id":"urn:uuid:efeba515-547b-4c1a-8cd0-4cbc5f714283"
+        }
+      ],
+      "cim:IdentifiedObject.mRID": "4f3b7c21-987a-4c22-b111-9a7c8e9f2d12",
+      "cim:IdentifiedObject.name": "20-3i",
+      "cim:IdentifiedObject.description": "Powertransformer"
+    }
+----
+
+
