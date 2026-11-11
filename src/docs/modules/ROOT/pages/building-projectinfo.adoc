@@ -136,20 +136,21 @@ The WorkTask class is used to describe the activities on one or multiple Asset (
 The {tc57}/Asset.html[Asset] class is used to describe the physical assets associated with the project. Every Asset has a relation to their PowerSystemResources. In most cases is this the PowerTransformer, but it can also be an ACLineSegment(Cable) or a BusBarSection. The Asset class contains also information about the asset, such as the name and description.
 
 .NBNL AS (Asset) Profile
-[source=json]
+[source,json]
 ----
     {
       "@id": "urn:uuid:4f3b7c21-987a-4c22-b111-9a7c8e9f2d12",
       "@type": "cim:Asset",
       "cim:Asset.PowerSystemResources": [
-        {
-          "@id":"urn:uuid:efeba515-547b-4c1a-8cd0-4cbc5f714283"
-        }
+          "urn:uuid:efeba515-547b-4c1a-8cd0-4cbc5f714283" <1>
       ],
       "cim:IdentifiedObject.mRID": "4f3b7c21-987a-4c22-b111-9a7c8e9f2d12",
       "cim:IdentifiedObject.name": "20-3i",
       "cim:IdentifiedObject.description": "Powertransformer"
     }
 ----
+remark:
 
+* (1) Curie - references between Profiles for example between Asset and Equipment (https://modellen.netbeheernederland.nl/nbnl-asset/3.0/schema/class/Asset.html#PowerSystemResources[Asset.PowerSystemResources]) are based on a https://linkml.io/linkml-model/latest/docs/Curie/[curie], there is *no* "@id": in front of the URN
 
+This is done to be able to validate the instance data of the individual profiles, in this case the asset profile based on the https://modellen.netbeheernederland.nl/nbnl-asset/3.0/schema/_attachments/schemas/shacl/nbnl_asset.shacl.ttl[Asset Shacl]. Because the instance data of the PowerSystemResource is only valid in combination with the instancedata from an EQ profile, by removing the "@id": it will be excluded in the Asset Shacl validation.
